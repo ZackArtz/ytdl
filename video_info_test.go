@@ -24,7 +24,26 @@ func TestVideoInfo(t *testing.T) {
 	}
 }
 
+func TestVideoInfoLivestream(t *testing.T) {
+	testCases := map[string]bool{
+		"https://www.youtube.com/watch?v=FrG4TEcSuRg": false,
+		"https://www.youtube.com/watch?v=MXgnIP4rMoI": false,
+		"https://www.youtube.com/watch?v=aQZDbBGBJsM": false,
+		"https://www.youtube.com/watch?v=0fllyJTBsRU": false,
+		"https://www.youtube.com/watch?v=2L9vFNMvIBE": true,
+		"https://www.youtube.com/watch?v=1Cs0qyG78qY": true,
+	}
 
+	for url, livestream := range testCases {
+		info, err := GetVideoInfo(url)
+		if err != nil {
+			t.Fatal(err)
+		}
+		if info.Livestream != livestream {
+			t.Errorf("Failed test case: %v.  Expected %v, got %v.", url, livestream, info.Livestream)
+		}
+	}
+}
 
 func TestGetDownloadURL(t *testing.T) {
 	testCases := []string{

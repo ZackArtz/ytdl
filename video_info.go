@@ -43,6 +43,8 @@ type VideoInfo struct {
 	Author string `json:"author"`
 	// Duration of the video
 	Duration time.Duration
+	// Whether the video is a livestream.
+	Livestream bool
 
 	htmlPlayerFile string
 }
@@ -237,6 +239,9 @@ func getVideoInfoFromHTML(id string, html []byte) (*VideoInfo, error) {
 		info.Author = a
 	} else {
 		log.Debug("Unable to extract author")
+	}
+	if livestream, ok := inf["livestream"].(string); ok && livestream == "1" {
+		info.Livestream = true
 	}
 
 	if length, ok := inf["length_seconds"].(string); ok {
